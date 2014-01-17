@@ -90,7 +90,8 @@ def ircformat(message):
         text = urlize(message[first.end():second.start()], autoescape=True)
         if text:  # Don't output empty <span> tags.
             if style:
-                css = '; '.join('{}: {}'.format(*s) for s in style.iteritems())
+                css = '; '.join('{}: {}'.format(*s)
+                                for s in sorted(style.iteritems()))
                 html += '<span style="{}">{}</span>'.format(css, text)
             else:
                 html += text
