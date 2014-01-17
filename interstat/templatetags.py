@@ -13,19 +13,19 @@ register = template.Library()
 
 
 FORMATTING_BOUNDARIES = re.compile(r"""
-    \x02 |            # Bold
-    \x03(             # Color
-      [0-9]?[0-9](    # Optional foreground number (from 0 or 00 to 99)
-        ,[0-9]?[0-9]  # Optional background number (from 0 or 00 to 99)
+    \x02 |             # Bold
+    \x03(?:            # Color
+      ([0-9]{1,2})(?:  # Optional foreground number (from 0 or 00 to 99)
+        ,([0-9]{1,2})  # Optional background number (from 0 or 00 to 99)
       )?
     )? |
-    \x0F |            # Normal (revert to default formatting)
-    \x16 |            # Reverse video (sometimes rendered as italics)
-    \x1F |            # Underline
-    ^ | $             # Beginning and end of string, for convenience
-                      #   This *must* go at the end, otherwise it'll
-                      #   take precedence over a control code at the
-                      #   start of a string.
+    \x0F |             # Normal (revert to default formatting)
+    \x16 |             # Reverse video (sometimes rendered as italics)
+    \x1F |             # Underline
+    ^ | $              # Beginning and end of string, for convenience
+                       #   This *must* go at the end, otherwise it'll
+                       #   take precedence over a control code at the
+                       #   start of a string.
     """, re.VERBOSE)
 
 
