@@ -58,5 +58,6 @@ def as_html(log_file, format, **kwargs):
     template_dirs = [DEFAULT_TEMPLATE_DIR]
     if kwargs.get('template_dir'):
         template_dirs.insert(0, kwargs.pop('template_dir'))
-    settings.configure(TEMPLATE_DIRS=template_dirs)
+    settings.configure(TEMPLATE_DEBUG=True,
+                       TEMPLATE_DIRS=template_dirs)
     return render_to_string('log.html', kwargs)
