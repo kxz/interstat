@@ -1,0 +1,15 @@
+*.py[co]
+
+# tox
+.tox
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+develop-eggs
+.installed.cfg
