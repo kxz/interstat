@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from itertools import tee
 import re
 from zlib import adler32
