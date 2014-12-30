@@ -1,11 +1,15 @@
 """Command line entry points."""
 
 
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+
 import argparse
 import os.path
 import sys
 
-from . import as_html
+from . import file_as_html
 from .formats import formats
 
 
@@ -39,15 +43,15 @@ def main():
         help='output HTML file (default: stdout)')
     args = parser.parse_args()
     if args.list_formats:
-        print ', '.join(formats)
+        print(', '.join(formats))
         return
     title = (args.title or
              os.path.splitext(os.path.basename(args.log_file.name))[0])
-    html = as_html(args.log_file, args.format,
-                   stylesheet=args.stylesheet,
-                   template_dir=args.template_dir,
-                   title=title)
-    args.html_file.write(html.encode('utf-8'))
+    html = file_as_html(args.log_file, args.format,
+                        stylesheet=args.stylesheet,
+                        template_dir=args.template_dir,
+                        title=title)
+    args.html_file.write(html)
 
 
 if __name__ == '__main__':

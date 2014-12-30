@@ -1,10 +1,18 @@
+"""IRC log file format definitions."""
+
+
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+
 import re
 
 
 def c(regex):
-    return re.compile('^{}$'.format(regex))
+    return re.compile(r'^{}$'.format(regex))
 
 
+#: A dict mapping supported formats to their rules.
 formats = {
     'omnipresence': {
         'line':         c(r'\[(?P<timestamp>.*?)\]  (?P<line>.*)'),

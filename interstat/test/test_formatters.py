@@ -2,9 +2,13 @@
 # pylint: disable=missing-docstring
 
 
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+
 import unittest
 
-from ..templatetags import ircformat
+from ..formatters import line_as_html
 
 
 IRC_AS_HTML = [
@@ -25,4 +29,4 @@ IRC_AS_HTML = [
 class TemplateTagsTestCase(unittest.TestCase):
     def test_ircformat(self):
         for irc, html in IRC_AS_HTML:
-            self.assertEqual(ircformat(irc), html)
+            self.assertEqual(line_as_html(irc), html)

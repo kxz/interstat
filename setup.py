@@ -47,7 +47,8 @@ setup(
     entry_points={
         'console_scripts': ['interstat=interstat.__main__:main']},
     install_requires=[
-        'Django'],
+        'future',
+        'Jinja2'],
     tests_require=[
         'tox'],
     cmdclass={
