@@ -45,7 +45,7 @@ setup(
             'templates/*.html',
             'templates/message/*.html']},
     entry_points={
-        'console_scripts': ['interstat=interstat.cli:main']},
+        'console_scripts': ['interstat=interstat.__main__:main']},
     install_requires=[
         'Django'],
     tests_require=[

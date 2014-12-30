@@ -1,3 +1,6 @@
+"""Command line entry points."""
+
+
 import argparse
 import os.path
 import sys
@@ -7,6 +10,7 @@ from .formats import formats
 
 
 def main():
+    """Default command line entry point."""
     parser = argparse.ArgumentParser(
         description='Format IRC log files as HTML.')
     parser.add_argument(
@@ -28,11 +32,11 @@ def main():
     parser.add_argument(
         'log_file', metavar='LOGFILE',
         nargs='?', type=argparse.FileType('r'), default=sys.stdin,
-        help='log file to format')
+        help='log file to format (default: stdin)')
     parser.add_argument(
         'html_file', metavar='HTMLFILE',
         nargs='?', type=argparse.FileType('w'), default=sys.stdout,
-        help='output HTML file')
+        help='output HTML file (default: stdout)')
     args = parser.parse_args()
     if args.list_formats:
         print ', '.join(formats)
