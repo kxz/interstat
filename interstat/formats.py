@@ -1,14 +1,16 @@
 """IRC log file format definitions."""
+# pylint: disable=invalid-name,line-too-long
 
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
-from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+from builtins import *
 
 import re
 
 
 def c(regex):
+    """A convenience alias for anchoring and compiling *regex*."""
     return re.compile(r'^{}$'.format(regex))
 
 

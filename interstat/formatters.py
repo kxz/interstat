@@ -3,7 +3,7 @@
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
-from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+from builtins import *
 
 from datetime import datetime
 from itertools import tee
@@ -48,12 +48,15 @@ MIRC_COLORS = ['white', 'black', 'navy', 'green',
 
 
 def _pairwise(iterable):
-    a, b = tee(iterable)
+    """Yield successive overlapping pairs from *iterable*."""
+    a, b = tee(iterable)  # pylint: disable=invalid-name
     next(b, None)
     return zip(a, b)
 
 
 def _toggle(mapping, key, value):
+    """If *key* is set in *mapping*, delete its value.  Otherwise, set
+    *key* to *value*."""
     if key in mapping:
         del mapping[key]
     else:
@@ -99,21 +102,21 @@ def line_as_html(message):
         text = urlize(message[first.end():second.start()])
         if text:  # Don't output empty <span> tags.
             if style:
-                css = '; '.join('{}: {}'.format(*s)
-                                for s in sorted(style.items()))
+                css = '; '.join('{}: {}'.format(k, v)
+                                for k, v in sorted(style.items()))
                 html += '<span style="{}">{}</span>'.format(css, text)
             else:
                 html += text
     return html
 
 
-def file_as_messages(log_file, format):
+def file_as_messages(log_file, format_name):
     """Yield message dicts from an IRC log file, parsed according to the
     given log format, suitable for passing into Interstat templates."""
     try:
-        rules = formats[format]
+        rules = formats[format_name]
     except KeyError:
-        raise ValueError('unknown log format: {}'.format(format))
+        raise ValueError('unknown log format: {}'.format(format_name))
     for i, line in enumerate(log_file):
         match = rules['line'].match(line)
         if match is None:
@@ -137,10 +140,10 @@ def file_as_messages(log_file, format):
         yield message
 
 
-def file_as_html(log_file, format, **kwargs):
+def file_as_html(log_file, format_name, **kwargs):
     """Return an HTML rendering of an IRC log file, parsed according to
     the given log format."""
-    kwargs['messages'] = file_as_messages(log_file, format)
+    kwargs['messages'] = file_as_messages(log_file, format_name)
     # Tell Jinja where to look for templates.
     loader_choices = [PackageLoader(PACKAGE_NAME)]
     if kwargs.get('template_dir'):
@@ -152,4 +155,5 @@ def file_as_html(log_file, format, **kwargs):
     from .filters import colorhash, ircformat
     env.filters['colorhash'] = colorhash
     env.filters['ircformat'] = ircformat
+    # pylint: disable=no-member
     return env.get_template('log.html').render(**kwargs)

@@ -1,10 +1,10 @@
 """Unit tests for basic IRC message formatting."""
-# pylint: disable=missing-docstring
+# pylint: disable=missing-docstring,too-few-public-methods
 
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
-from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+from builtins import *
 
 import unittest
 

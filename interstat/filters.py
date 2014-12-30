@@ -3,7 +3,7 @@
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
-from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+from builtins import *
 
 from zlib import adler32
 
@@ -12,9 +12,9 @@ from jinja2 import evalcontextfilter, Markup
 from .formatters import line_as_html
 
 
-def colorhash(s):
-    """Return an HTML color "hash" for the string *s*."""
-    return '#{:03x}'.format(adler32(s.encode('utf-8')) & 0x777)
+def colorhash(string):
+    """Return an HTML color "hash" for *string*."""
+    return '#{:03x}'.format(adler32(string.encode('utf-8')) & 0x777)
 
 
 @evalcontextfilter

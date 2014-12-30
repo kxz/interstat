@@ -3,12 +3,11 @@
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
-from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
+from builtins import *
 
 import argparse
 import io
 import os.path
-import sys
 
 from . import file_as_html
 from .formats import formats

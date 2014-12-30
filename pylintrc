@@ -1,0 +1,3 @@
+[MESSAGES CONTROL]
+# Disable warnings triggered by future's "from builtins import *".
+disable=redefined-builtin,unused-wildcard-import,wildcard-import
