@@ -1,3 +1,9 @@
+"""Unit tests for basic IRC message formatting."""
+# pylint: disable=missing-docstring
+
+
+import unittest
+
 from ..templatetags import ircformat
 
 
@@ -16,9 +22,7 @@ IRC_AS_HTML = [
 ]
 
 
-def check_html(irc, html):
-    assert ircformat(irc) == html
-
-def test_ircformat():
-    for irc, html in IRC_AS_HTML:
-        yield check_html, irc, html
+class TemplateTagsTestCase(unittest.TestCase):
+    def test_ircformat(self):
+        for irc, html in IRC_AS_HTML:
+            self.assertEqual(ircformat(irc), html)
