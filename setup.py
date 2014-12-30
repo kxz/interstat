@@ -20,7 +20,7 @@ class Tox(test):
 setup(
     name='interstat',
     description='An HTML formatter for IRC log files',
-    version='0.1',
+    version='0.2',
     author='Kevin Xiwei Zheng',
     author_email='blankplacement+interstat@gmail.com',
     url='https://github.com/kxz/interstat',
