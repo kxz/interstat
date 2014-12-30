@@ -6,6 +6,7 @@ from __future__ import (absolute_import, division,
 from builtins import *  # pylint: disable=redefined-builtin,wildcard-import
 
 import argparse
+import io
 import os.path
 import sys
 
@@ -34,24 +35,28 @@ def main():
         '--title',
         help='HTML page <title> (default: log file basename)')
     parser.add_argument(
-        'log_file', metavar='LOGFILE',
-        nargs='?', type=argparse.FileType('r'), default=sys.stdin,
+        'log_path', metavar='LOGFILE', nargs='?',
         help='log file to format (default: stdin)')
     parser.add_argument(
-        'html_file', metavar='HTMLFILE',
-        nargs='?', type=argparse.FileType('w'), default=sys.stdout,
+        'html_path', metavar='HTMLFILE', nargs='?',
         help='output HTML file (default: stdout)')
     args = parser.parse_args()
     if args.list_formats:
         print(', '.join(formats))
         return
+    # Manually using io.open instead of delegating to argparse.FileType
+    # is necessary here because the latter yields byte strings instead
+    # of Unicode strings on Python 2, causing UnicodeDecodeErrors down
+    # the line.  This can be reverted when Python 2 support is dropped.
+    log_file = io.open(args.log_path or 0)
     title = (args.title or
-             os.path.splitext(os.path.basename(args.log_file.name))[0])
-    html = file_as_html(args.log_file, args.format,
+             os.path.splitext(os.path.basename(log_file.name))[0])
+    html = file_as_html(log_file, args.format,
                         stylesheet=args.stylesheet,
                         template_dir=args.template_dir,
                         title=title)
-    args.html_file.write(html)
+    html_file = io.open(args.html_path or 1, 'w')
+    html_file.write(html)
 
 
 if __name__ == '__main__':
