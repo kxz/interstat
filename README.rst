@@ -32,3 +32,6 @@ Interstat also provides a Python API, in case that's more your thing:
 >>> interstat.file_as_html(open('irc.log'), 'omnipresence')
 >>> # Or just some text with embedded mIRC formatting codes:
 >>> interstat.line_as_html('\x02Bold\x02 and \x1Funderlined\x1F, oh my!')
+
+Report bugs and make feature requests on `Interstat's GitHub project
+page <https://github.com/kxz/interstat>`_.
