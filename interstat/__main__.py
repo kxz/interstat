@@ -9,7 +9,9 @@ import argparse
 import io
 import os.path
 
-from . import file_as_html
+from pkg_resources import require
+
+from . import __name__ as PACKAGE_NAME, file_as_html
 from .formats import formats
 
 
@@ -38,6 +40,9 @@ def main():
         action='append', default=[],
         help='specify a custom template variable '
              '(may be used multiple times)')
+    parser.add_argument(
+        '--version', action='version',
+        version='%(prog)s ' + require(PACKAGE_NAME)[0].version)
     parser.add_argument(
         'log_path', metavar='LOGFILE', nargs='?',
         help='log file to format (default: stdin)')
