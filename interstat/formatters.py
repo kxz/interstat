@@ -140,14 +140,20 @@ def file_as_messages(log_file, format_name):
         yield message
 
 
-def file_as_html(log_file, format_name, **kwargs):
+def file_as_html(log_file, format_name, template_dir=None, **kwargs):
     """Return an HTML rendering of an IRC log file, parsed according to
-    the given log format."""
+    the given log format.
+
+    Custom HTML templates are first looked for in *template_dir*, if
+    given, before falling back to the defaults.  Any remaining keyword
+    arguments, with the exception of ``messages`` (which is reserved),
+    are passed directly to the renderer for use as template variables.
+    By default, the Interstat CLI passes ``title`` and ``stylesheet``.
+    """
     kwargs['messages'] = file_as_messages(log_file, format_name)
     # Tell Jinja where to look for templates.
     loader_choices = [PackageLoader(PACKAGE_NAME)]
-    if kwargs.get('template_dir'):
-        template_dir = kwargs.pop('template_dir')
+    if template_dir is not None:
         loader_choices.insert(0, FileSystemLoader(template_dir))
     env = Environment(loader=ChoiceLoader(loader_choices),
                       keep_trailing_newline=True)

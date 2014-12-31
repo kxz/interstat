@@ -51,8 +51,8 @@ def main():
     title = (args.title or
              os.path.splitext(os.path.basename(log_file.name))[0])
     html = file_as_html(log_file, args.format,
-                        stylesheet=args.stylesheet,
                         template_dir=args.template_dir,
+                        stylesheet=args.stylesheet,
                         title=title)
     html_file = io.open(args.html_path or 1, 'w')
     html_file.write(html)
