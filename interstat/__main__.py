@@ -34,6 +34,11 @@ def main():
         '--title',
         help='HTML page <title> (default: log file basename)')
     parser.add_argument(
+        '--variable', dest='variables', metavar='KEY=VALUE',
+        action='append', default=[],
+        help='specify a custom template variable '
+             '(may be used multiple times)')
+    parser.add_argument(
         'log_path', metavar='LOGFILE', nargs='?',
         help='log file to format (default: stdin)')
     parser.add_argument(
@@ -48,13 +53,21 @@ def main():
     # of Unicode strings on Python 2, causing UnicodeDecodeErrors down
     # the line.  This can be reverted when Python 2 support is dropped.
     log_file = io.open(args.log_path or 0)
-    title = (args.title or
-             os.path.splitext(os.path.basename(log_file.name))[0])
-    html = file_as_html(log_file, args.format,
-                        template_dir=args.template_dir,
-                        stylesheet=args.stylesheet,
-                        title=title)
-    html_file = io.open(args.html_path or 1, 'w')
+    # Handle custom template variables.
+    kwargs = dict()
+    kwargs['title'] = (args.title or
+                       os.path.splitext(os.path.basename(log_file.name))[0])
+    if args.stylesheet is not None:
+        kwargs['stylesheet'] = args.stylesheet
+    for declaration in args.variables:
+        key, sep, value = declaration.partition('=')
+        if not sep:
+            parser.error('invalid variable declaration "{}"'
+                         .format(declaration))
+        kwargs[key] = value
+    html = file_as_html(
+        log_file, args.format, template_dir=args.template_dir, **kwargs)
+    html_file = io.open(args.html_path or 1, 'w')  # Same as above.
     html_file.write(html)
 
 
