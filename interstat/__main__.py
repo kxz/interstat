@@ -7,12 +7,20 @@ from builtins import *
 
 import argparse
 import io
-import os.path
+from os.path import basename, splitext
 
 from pkg_resources import require
 
 from . import __name__ as PACKAGE_NAME, file_as_html
 from .formats import formats
+
+
+def patharg(path, default_fd=0):
+    """Return *default_fd* if *path* is the string `"-"` or empty, or
+    *path* otherwise."""
+    if not path or path == '-':
+        return default_fd
+    return path
 
 
 def main():
@@ -53,15 +61,8 @@ def main():
     if args.list_formats:
         print(', '.join(formats))
         return
-    # Manually using io.open instead of delegating to argparse.FileType
-    # is necessary here because the latter yields byte strings instead
-    # of Unicode strings on Python 2, causing UnicodeDecodeErrors down
-    # the line.  This can be reverted when Python 2 support is dropped.
-    log_file = io.open(args.log_path or 0)
     # Handle custom template variables.
     kwargs = dict()
-    kwargs['title'] = (args.title or
-                       os.path.splitext(os.path.basename(log_file.name))[0])
     if args.stylesheet is not None:
         kwargs['stylesheet'] = args.stylesheet
     for declaration in args.variables:
@@ -70,10 +71,21 @@ def main():
             parser.error('invalid variable declaration "{}"'
                          .format(declaration))
         kwargs[key] = value
-    html = file_as_html(
-        log_file, args.format, template_dir=args.template_dir, **kwargs)
-    html_file = io.open(args.html_path or 1, 'w')  # Same as above.
-    html_file.write(html)
+    # Manually using io.open instead of delegating to argparse.FileType
+    # is necessary here because the latter yields byte strings instead
+    # of Unicode strings on Python 2, causing UnicodeDecodeErrors down
+    # the line.  This can be reverted when Python 2 support is dropped.
+    with io.open(patharg(args.log_path, 0)) as log_file:
+        if args.title:
+            kwargs['title'] = args.title
+        elif isinstance(log_file.name, int):  # file descriptor
+            kwargs['title'] = 'Interstat log'
+        else:
+            kwargs['title'] = splitext(basename(log_file.name))[0]
+        html = file_as_html(log_file, args.format,
+                            template_dir=args.template_dir, **kwargs)
+    with io.open(patharg(args.html_path, 1), 'w') as html_file:
+        html_file.write(html)
 
 
 if __name__ == '__main__':
